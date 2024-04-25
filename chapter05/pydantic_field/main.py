@@ -1,4 +1,4 @@
-#!/usr/bin/evn python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from decimal import Decimal
 from typing import Union, Optional, List

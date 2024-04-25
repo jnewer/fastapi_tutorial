@@ -1,20 +1,39 @@
-#!/usr/bin/evn python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
-app = FastAPI(title='主应用',description="我是主应用文档的描述",version="v1.0.0")
-@app.get('/index',summary='首页')
+app = FastAPI(title="主应用", description="我是主应用文档的描述", version="v1.0.0")
+
+
+@app.get("/index", summary="首页")
 async def index():
     return JSONResponse({"index": "我是属于主应用的接口！"})
 
-subapp = FastAPI(title='子应用',description="我是子应用文档的描述",version="v1.0.0")
-@subapp.get('/index',summary='首页')
-async def index():
-    return JSONResponse({"index": "我是属于子应用的接口！"})
 
-app.mount(path='/subapp',app=subapp,name='subapp')
+# subapp = FastAPI(title="子应用", description="我是子应用文档的描述", version="v1.0.0")
+
+
+# @subapp.get("/index", summary="首页")
+# async def index():
+#     return JSONResponse({"index": "我是属于子应用的接口！"})
+
+
+# app.mount(path="/subapp", app=subapp, name="subapp")
+
+from flask import Flask
+from fastapi.middleware.wsgi import WSGIMiddleware
+
+flask_app = Flask(__name__)
+
+
+@flask_app.route("/index")
+def flask_main():
+    return {"index": "我是属于Flask的接口！"}
+
+
+app.mount(path="/flaskapp", app=WSGIMiddleware(flask_app), name="flaskapp")
 
 
 if __name__ == "__main__":
@@ -23,4 +42,4 @@ if __name__ == "__main__":
 
     app_modeel_name = os.path.basename(__file__).replace(".py", "")
     print(app_modeel_name)
-    uvicorn.run(f"{app_modeel_name}:app", host='127.0.0.1', reload=True)
+    uvicorn.run(f"{app_modeel_name}:app", host="127.0.0.1", reload=True)

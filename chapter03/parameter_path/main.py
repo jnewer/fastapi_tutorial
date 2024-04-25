@@ -1,4 +1,4 @@
-#!/usr/bin/evn python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from typing import List
 from fastapi import FastAPI, Query, Path

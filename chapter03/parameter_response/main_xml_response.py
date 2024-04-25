@@ -1,4 +1,4 @@
-#!/usr/bin/evn python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from typing import List, Optional, Set
 from fastapi import FastAPI, Query, Path, Body, Header, Cookie
@@ -12,12 +12,12 @@ app = FastAPI()
 
 @app.get("/xml/")
 def get_xml_data():
-    data = """<?xml version="1.0" ?> 
+    data = """<?xml version="1.0" ?>
     <note>
-    <to>George</to> 
-    <from>John</Ffrom> 
-    <heading>Reminder</heading> 
-    <body>Don't forget the meeting!</body> 
+    <to>George</to>
+    <from>John</Ffrom>
+    <heading>Reminder</heading>
+    <body>Don't forget the meeting!</body>
     </note>
     """
     return Response(content=data, media_type="application/xml")

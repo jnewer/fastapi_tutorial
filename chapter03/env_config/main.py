@@ -1,9 +1,10 @@
-#!/usr/bin/evn python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from typing import Optional
 from fastapi import FastAPI
-from pydantic import BaseSettings, validator
-from pydantic.tools import lru_cache
+from pydantic import field_validator
+from pydantic_settings import BaseSettings
+from functools import lru_cache
 
 
 class Settings(BaseSettings):
@@ -16,7 +17,7 @@ class Settings(BaseSettings):
         env_file = ".env"
         env_file_encoding = 'utf-8'
 
-    @validator("version", pre=True)
+    @field_validator("version")
     def version_len_check(cls, v: str) -> Optional[str]:
         if v and len(v) == 0:
             return None
