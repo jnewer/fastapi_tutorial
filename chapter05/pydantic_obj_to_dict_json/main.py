@@ -21,15 +21,15 @@ if __name__ == '__main__':
         print(e.errors())
         print(e.json())
     else:
-        # print(user.dict())
-        print(user.dict(exclude_unset=True))
-        # print(user.dict(exclude={'password'}))
-        print(user.json(exclude={'password'},models_as_dict=False))
+        print(user.model_dump())
+        print(user.model_dump(exclude_unset=True))
+        print(user.model_dump(exclude={'password'}))
+        print(user.model_dump_json(exclude={'password'}))
         # # 进行拷贝==================
-        # new_user = user.copy()
-        # print("userID", user, id(user))
-        # print("new_userID", new_user, id(new_user))
+        new_user = user.model_copy()
+        print("userID", user, id(user))
+        print("new_userID", new_user, id(new_user))
         # # 仅仅包含密码输出===========
         new_user = user.copy(include={'password'})
-        # print("new_user", new_user)
+        print("new_user", new_user)
         print("new_userID", new_user, id(new_user))

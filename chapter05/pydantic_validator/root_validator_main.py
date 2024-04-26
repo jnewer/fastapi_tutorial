@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 from typing import Dict
 
-from pydantic import BaseModel, validator, ValidationError, PydanticValueError
-
-from pydantic import BaseModel, ValidationError, root_validator
+from pydantic import BaseModel, ValidationError, model_validator
 
 
 class User(BaseModel):
@@ -12,7 +10,7 @@ class User(BaseModel):
     password_old: str
     password_new: str
 
-    @root_validator
+    @model_validator(mode='before')
     def check_passwords(cls, values):
         password_old, password_new = values.get('password_old'), values.get('password_new')
         # 新旧号码的确认匹配处理
@@ -22,7 +20,7 @@ class User(BaseModel):
 
 if __name__ == '__main__':
     try:
-        user = User(username='xiaozhong', password_old='123456', password_new='123456_')
+        user = User(username='xiaozhong', password_old='123456', password_new='123456')
     except ValidationError as e:
         print(e.errors())
     else:

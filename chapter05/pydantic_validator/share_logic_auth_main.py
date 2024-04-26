@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 from typing import Union, Optional, List
 
-from pydantic import BaseModel, validator, ValidationError
-
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 
 def share_logic_auth(name: str) -> str:
@@ -16,7 +14,7 @@ def share_logic_auth(name: str) -> str:
 class Base(BaseModel):
     name: str
     # 定义校验器
-    _validator_name = validator("name", allow_reuse=True)(share_logic_auth)
+    _validator_name = field_validator("name")(share_logic_auth)
 
 
 class Yuser(Base):

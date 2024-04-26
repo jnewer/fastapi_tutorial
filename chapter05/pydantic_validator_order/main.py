@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 from typing import Dict
 
-from pydantic import BaseModel, validator, ValidationError
+from pydantic import BaseModel, field_validator, ValidationError
 
 
 class Person(BaseModel):
     username: str
-    address: Dict
+    address: str
 
-    @validator("address",pre=True)
+    @field_validator("address")
     def adress_rule(cls, address):
         # 如果地址长度小于6，那么则返回
         if len(address) < 6:
@@ -18,9 +18,10 @@ class Person(BaseModel):
             raise ValueError("地址长度不能大于12")
         return address
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     try:
-        user = Person(username='xiaozhong', address='12345')
+        user = Person(username="xiaozhong", address="12345")
     except ValidationError as e:
         print(e.errors())
     else:

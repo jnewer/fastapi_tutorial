@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 from typing import Dict, Optional
 
-from pydantic import BaseModel, validator, ValidationError, PydanticValueError
+from pydantic import BaseModel, field_validator, ValidationError,ValidationError
 
-class AddressError(PydanticValueError):
+class AddressError(ValidationError):
     code = '错误类型'
     msg_template = '当前地址长度不对，它应该需要{errmeg}，当前传入的值为：{value}'
 
@@ -12,7 +12,7 @@ class Person(BaseModel):
     username: str
     address: str
 
-    @validator("address",pre=False)
+    @field_validator("address")
     def adress_rule(cls, address):
         # 如果地址长度小于6，那么则返回
         if len(address) < 6:
@@ -22,12 +22,12 @@ class Person(BaseModel):
         return address
 
 if __name__ == '__main__':
-    # try:
-    #     user = Person(username='xiaozhong', address='12345')
-    # except ValidationError as e:
-    #     print(e.errors())
-    # else:
-    #     print(user.username, user.address)
+    try:
+        user = Person(username='xiaozhong', address='12345')
+    except ValidationError as e:
+        print(e.errors())
+    else:
+        print(user.username, user.address)
 
 
     class Person(BaseModel):
@@ -40,8 +40,8 @@ if __name__ == '__main__':
         try:
             user = Person(name='xiaozhong')
         except ValidationError as e:
-            # print(e.errors())
-            # print(e.json())
+            print(e.errors())
+            print(e.json())
             print(str(e))
         else:
             print(user.name, user.age)
