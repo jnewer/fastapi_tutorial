@@ -38,12 +38,12 @@ from db.database import AsyncSession
 from dependencies import get_db_session
 from fastapi import Depends
 
-router_uesr = APIRouter(prefix="/api/v1/user", tags=["用户管理"])
+router_uesr = APIRouter(prefix="/api/v1", tags=["用户管理"])
 
 
-@router_uesr.post("/user/creat")
-async def creat(user:UserCreate,db_session: AsyncSession = Depends(get_db_session)):
-    result= await UserServeries.create_user(db_session,**user.dict())
+@router_uesr.post("/user/create")
+async def create(user:UserCreate,db_session: AsyncSession = Depends(get_db_session)):
+    result= await UserServeries.create_user(db_session,**user.model_dump())
     return {"code": "200", "msg": "用户创建成功！","data":result}
 
 

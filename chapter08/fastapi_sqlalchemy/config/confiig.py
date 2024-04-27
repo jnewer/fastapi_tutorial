@@ -32,7 +32,7 @@ Author = zyx
 @文件功能描述:------
 """
 
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from functools import lru_cache
 
 class Settings(BaseSettings):

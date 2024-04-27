@@ -1,7 +1,6 @@
-
 from plugins.base import PluginBase
 from fastapi import FastAPI
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from fastapi.middleware.cors import CORSMiddleware
 import typing
 import asyncio
@@ -10,15 +9,24 @@ from fastapi import BackgroundTasks
 
 class HookPluginClient(PluginBase):
     # 设置插件默认的参数信息
-    def __init__(self,
-                 on_before_request: typing.Sequence[typing.Callable] = None,
-                 on_after_request: typing.Sequence[typing.Callable] = None,
-                 on_teardown_appcontext: typing.Sequence[typing.Callable] = None,
-                 *args, **kwargs):
+    def __init__(
+        self,
+        on_before_request: typing.Sequence[typing.Callable] = None,
+        on_after_request: typing.Sequence[typing.Callable] = None,
+        on_teardown_appcontext: typing.Sequence[typing.Callable] = None,
+        *args,
+        **kwargs
+    ):
         super().__init__(*args, **kwargs)
-        self.on_before_request = [] if on_before_request is None else list(on_before_request)
-        self.on_after_request = [] if on_after_request is None else list(on_after_request)
-        self.on_teardown_appcontext = [] if on_teardown_appcontext is None else list(on_teardown_appcontext)
+        self.on_before_request = (
+            [] if on_before_request is None else list(on_before_request)
+        )
+        self.on_after_request = (
+            [] if on_after_request is None else list(on_after_request)
+        )
+        self.on_teardown_appcontext = (
+            [] if on_teardown_appcontext is None else list(on_teardown_appcontext)
+        )
 
     def init_app(self, app: FastAPI, *args, **kwargs):
         pass
@@ -50,6 +58,7 @@ class HookPluginClient(PluginBase):
         def decorator(func: typing.Callable) -> typing.Callable:
             self.add_event_handler(event_type, func)
             return func
+
         return decorator
 
     async def before_request(self, request) -> None:
