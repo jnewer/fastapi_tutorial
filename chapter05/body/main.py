@@ -1,16 +1,16 @@
 from fastapi import FastAPI
-from pydantic import BaseModel, root_validator, Field
+from pydantic import BaseModel, model_validator, Field
 
 app = FastAPI()
 
 
 class User(BaseModel):
-    username: str = Field(..., title='姓名', description='姓名字段需要长度大于6且小于等于12', max_length=12, min_length=6, example="Foo")
-    age: int = Field(..., title='年龄', description='年龄需要大于18岁', ge=18, example=12)
-    password_old: str = Field(..., title='旧密码', description='密码需要长度大于6', gl=6, example=6)
-    password_new: str = Field(..., title='新密码', description='密码需要长度大于6', gl=6, example=6)
+    username: str = Field(..., title='姓名', description='姓名字段需要长度大于6且小于等于12', max_length=12, min_length=6, examples=["Foobar"])
+    age: int = Field(..., title='年龄', description='年龄需要大于18岁', ge=18, examples=[12])
+    password_old: str = Field(..., title='旧密码', description='密码需要长度大于6', min_length=6, examples=['123456'])
+    password_new: str = Field(..., title='新密码', description='密码需要长度大于6', min_length=6, examples=['123456'])
 
-    @root_validator
+    @model_validator(mode='before')
     def check_passwords(cls, values):
         password_old, password_new = values.get('password_old'), values.get('password_new')
         # 新旧号码的确认匹配处理

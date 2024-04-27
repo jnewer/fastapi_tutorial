@@ -28,6 +28,7 @@ app.add_middleware(TracdIDMiddleware)
 
 @app.get("/index")
 async def index():
+    log_info()
     return {
         'code': 200
     }

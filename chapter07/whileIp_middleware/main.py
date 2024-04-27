@@ -18,16 +18,16 @@ class WhileIpMiddleware:
         self.app = app
         self.allow_ip = allow_ip or "*"
 
-        async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
-            if scope["type"] in ("http", "websocket") and scope["scheme"] in ("http", "ws"):
-                conn = HTTPConnection(scope=scope)
-                if self.allow_ip and conn.client.host not in self.allow_ip:
-                    response = PlainTextResponse(content="不在IP白名单内", status_code=403)
-                    await response(scope, receive, send)
-                    return
-                await self.app(scope, receive, send)
-            else:
-                await self.app(scope, receive, send)
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] in ("http", "websocket") and scope["scheme"] in ("http", "ws"):
+            conn = HTTPConnection(scope=scope)
+            if self.allow_ip and conn.client.host not in self.allow_ip:
+                response = PlainTextResponse(content="不在IP白名单内", status_code=403)
+                await response(scope, receive, send)
+                return
+            await self.app(scope, receive, send)
+        else:
+            await self.app(scope, receive, send)
 
 
 app.add_middleware(WhileIpMiddleware, allow_ip=['127.0.0.2'])
